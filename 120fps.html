@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+Based on this posting:
+http://stackoverflow.com/questions/20336955/how-to-step-one-frame-forward-and-one-frame-backward-in-video-playback/20339938#20339938
+v0.1: initial
+v0.2: highlight key commands as buttons, fps snap-in time
+v0.3: key commands -> button commands
+v0.4: allow for "http[s]://....?t=7.07", pause video on fwd/bck/"|<"
+-->
+<html>
+  <head>
+    <title>120fps single frame video player</title>
+
+<script type="text/javascript">
+var video, button, fps = 120, frameTime = 1 / fps; 
+
+function back() {
+    video.pause();
+
+    video.currentTime = Math.round(video.currentTime *fps) / fps;
+
+    if (video.currentTime >= frameTime) {
+        video.currentTime -= frameTime;
+    }
+}
+
+function forward() {
+    video.pause();
+
+    video.currentTime = Math.round(video.currentTime *fps) / fps;
+
+    if (video.currentTime+frameTime <= video.duration) {
+        video.currentTime += frameTime;
+    }
+}
+
+function doit() {
+    video = document.getElementById('video');
+    button = document.getElementById('button');
+
+    video.onloadeddata = function() {
+        if (window.location.search.split("=")[1]) {
+            tgt = Math.round(window.location.search.split("=")[1] *fps) / fps;
+
+            if ((tgt >= 0.0) && (tgt <= video.duration)) {
+                video.currentTime = tgt;
+            }
+        }
+    };
+
+    // workaround to trigger "onloadeddata" event in all cases
+    video.load();
+
+    setInterval(function(){ button.value = video.currentTime; }, 100);
+}
+</script>
+  </head>
+
+  <body onload="doit()">
+<h3>120fps single frame video player; v0.4 </h3>
+Works well with Chrome browser (Linux/Windows), a bit slow with Firefox and Opera (Windows), formatted <a href="https://gist.github.com/Hermann-SW/7e2ea089280f23ec8710">source</a><br/>
+<input type="button" value="|<" onclick="video.pause(); video.currentTime = 0">
+<input type="button" value="<"  onclick="back()">
+<input type="button" value=">"  onclick="forward()">
+<input type="button" value=">|" onclick="video.currentTime = Math.round(video.duration * fps) / fps">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t=<input type="button" id="button" size="9" readonly><br/>
+    <video id="video" controls="">
+      <source src="https://stamm-wilbrandt.de/videos/20151015_072501.mp4">
+    </video>
+  </body>
+</html>
