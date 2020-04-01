@@ -58,11 +58,12 @@ function doit() {
 
   <body onload="doit()">
 <h3>120fps single frame video player; v0.4 </h3>
-Works well with Chrome browser (Linux/Windows), a bit slow with Firefox and Opera (Windows), formatted <a href="https://gist.github.com/Hermann-SW/7e2ea089280f23ec8710">source</a><br/>
-<input type="button" value="|<" onclick="video.pause(); video.currentTime = 0">
+Works well with Chrome browser (Linux/Windows), a bit slow with Firefox and Opera (Windows)<br/>
+<center><input type="button" value="|<" onclick="video.pause(); video.currentTime = 0">
 <input type="button" value="<"  onclick="back()">
 <input type="button" value=">"  onclick="forward()">
 <input type="button" value=">|" onclick="video.currentTime = Math.round(video.duration * fps) / fps">
+</center><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t=<input type="button" id="button" size="9" readonly><br/>
     <video id="video" controls="">
       <source src="goi.mp4">
